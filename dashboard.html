@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio+ | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --indigo: #6366f1;
+  --blue: #3b82f6;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #f43f5e;
+  --bg: #020617;
+  --bg2: #0f172a;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --muted: #475569;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width:5px; } 
+::-webkit-scrollbar-thumb { background:#1e293b; border-radius:10px; }
+
+/* ── BG CANVAS ─────────────────────────────────── */
+#bgCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* ── NAVBAR ─────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg,#fff 30%,#94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo span { background: linear-gradient(135deg,var(--indigo),var(--cyan)); -webkit-background-clip:text; background-clip:text; }
+
+.nav-right { display:flex; align-items:center; gap:10px; }
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.primary { background: var(--indigo); color: white; }
+.primary:hover { box-shadow: 0 8px 20px rgba(99,102,241,0.35); }
+.secondary { background: var(--surface); color: var(--text2); border: 1px solid var(--border); }
+.secondary:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+.glow { background: linear-gradient(135deg,var(--indigo),var(--blue)); color: white; }
+.glow:hover { box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+
+.user-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,var(--indigo),var(--cyan));
+  display: flex; align-items:center; justify-content:center;
+  font-size: 14px; font-weight: 700; color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.user-avatar:hover { transform:scale(1.1); box-shadow:0 4px 12px rgba(99,102,241,0.4); }
+
+/* ── MAIN LAYOUT ─────────────────────────────────── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── HERO HEADER ─────────────────────────────────── */
+.dash-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dash-greeting {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.big-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,var(--indigo),var(--cyan));
+  display: flex; align-items:center; justify-content:center;
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800; color: white;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.2), 0 8px 24px rgba(99,102,241,0.3);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.online-dot {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  width: 12px; height: 12px;
+  background: var(--green);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+
+.greeting-text h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.greeting-text p { color: var(--text2); font-size: 14px; }
+
+.dash-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* ── STATS GRID ──────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.stat-card {
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.stat-card:hover { transform: translateY(-3px); border-color: rgba(99,102,241,0.3); }
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 16px 16px 0 0;
+}
+.stat-card.blue::before  { background: linear-gradient(90deg,var(--indigo),var(--blue)); }
+.stat-card.green::before { background: linear-gradient(90deg,var(--green),var(--cyan)); }
+.stat-card.amber::before { background: linear-gradient(90deg,var(--amber),#f97316); }
+.stat-card.pink::before  { background: linear-gradient(90deg,#ec4899,var(--red)); }
+
+.stat-icon {
+  font-size: 20px;
+  margin-bottom: 12px;
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items:center; justify-content:center;
+}
+.stat-card.blue  .stat-icon { background:rgba(99,102,241,0.15); }
+.stat-card.green .stat-icon { background:rgba(16,185,129,0.15); }
+.stat-card.amber .stat-icon { background:rgba(245,158,11,0.15); }
+.stat-card.pink  .stat-icon { background:rgba(236,72,153,0.15); }
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.stat-label { font-size: 13px; color: var(--text2); }
+
+.stat-change {
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.stat-change.up   { background:rgba(16,185,129,0.15); color:#34d399; }
+.stat-change.muted { background:var(--surface); color:var(--muted); }
+
+/* ── SECTION TITLES ──────────────────────────────── */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.section-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+.section-head a {
+  font-size: 13px;
+  color: var(--indigo);
+  text-decoration: none;
+  cursor: pointer;
+}
+.section-head a:hover { text-decoration: underline; }
+
+/* ── PROJECTS GRID ───────────────────────────────── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.project-card {
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.25s;
+  cursor: pointer;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99,102,241,0.35);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+
+/* thumbnail preview strip */
+.project-thumb {
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.thumb-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+.project-card-body { padding: 16px 18px; }
+
+.project-card-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.badge-published { background:rgba(16,185,129,0.15); color:#34d399; border:1px solid rgba(16,185,129,0.2); }
+.badge-draft     { background:rgba(71,85,105,0.3);   color:#64748b; border:1px solid rgba(71,85,105,0.3); }
+
+.project-card-meta {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.project-card-actions { display:flex; gap:8px; }
+
+.mini-btn {
+  flex: 1;
+  padding: 7px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.mini-btn:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+.mini-btn.accent { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.25); color:#a5b4fc; }
+.mini-btn.accent:hover { background:rgba(99,102,241,0.2); }
+.mini-btn.danger { background:rgba(244,63,94,0.07); border-color:rgba(244,63,94,0.15); color:#fda4af; }
+.mini-btn.danger:hover { background:rgba(244,63,94,0.15); }
+
+/* ── NEW PROJECT CARD ────────────────────────────── */
+.new-project-card {
+  background: none;
+  border: 1px dashed rgba(99,102,241,0.25);
+  border-radius: 16px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+}
+.new-project-card:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.04); color: #a5b4fc; }
+.new-project-card .plus { font-size: 28px; color: rgba(99,102,241,0.4); transition:0.2s; }
+.new-project-card:hover .plus { color: var(--indigo); transform: scale(1.2); }
+.new-project-card p { font-size: 14px; font-weight: 500; }
+
+/* ── TWO-COL ─────────────────────────────────────── */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:40px; }
+@media (max-width:768px) { .two-col { grid-template-columns:1fr; } }
+
+/* ── PROFILE CARD ────────────────────────────────── */
+.card {
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,var(--indigo),var(--cyan));
+  display: flex; align-items:center; justify-content:center;
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800; color: white;
+  flex-shrink: 0;
+}
+
+.profile-name { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; }
+.profile-role { font-size:13px; color:var(--muted); margin-top:2px; }
+
+.profile-field { margin-bottom:14px; }
+.profile-field label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px; }
+
+.profile-input {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: all 0.2s;
+}
+.profile-input:focus { border-color:rgba(99,102,241,0.4); box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+.profile-input:disabled { opacity:0.5; cursor:not-allowed; }
+
+.profile-save-row { display:flex; justify-content:flex-end; margin-top:16px; }
+
+/* ── ACTIVITY FEED ───────────────────────────────── */
+.activity-list { display:flex; flex-direction:column; gap:0; }
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom:none; }
+
+.act-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items:center; justify-content:center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.act-blue  { background:rgba(99,102,241,0.15); }
+.act-green { background:rgba(16,185,129,0.15); }
+.act-amber { background:rgba(245,158,11,0.15); }
+.act-red   { background:rgba(244,63,94,0.15); }
+
+.act-body { flex:1; }
+.act-text { font-size:13px; color:var(--text); line-height:1.5; }
+.act-text strong { color:var(--text); font-weight:500; }
+.act-time { font-size:11px; color:var(--muted); margin-top:2px; }
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.empty-state .ei { font-size:36px; margin-bottom:10px; opacity:0.3; }
+
+/* ── QUICK TIPS ──────────────────────────────────── */
+.tips-list { display:flex; flex-direction:column; gap:10px; }
+.tip {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.tip:hover { border-color:rgba(99,102,241,0.3); background:rgba(99,102,241,0.05); }
+.tip-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.tip-text { font-size:13px; color:var(--text2); line-height:1.5; }
+.tip-text strong { color:var(--text); font-weight:500; display:block; margin-bottom:2px; }
+
+/* ── ANIMATIONS ──────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.stat-card:nth-child(1) { animation-delay:0.05s; }
+.stat-card:nth-child(2) { animation-delay:0.1s; }
+.stat-card:nth-child(3) { animation-delay:0.15s; }
+.stat-card:nth-child(4) { animation-delay:0.2s; }
+
+/* ── MODAL ───────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset:0;
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9000;
+  display: flex; align-items:center; justify-content:center;
+  padding: 20px;
+}
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+  animation: fadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+.modal h2 { font-family:'Syne',sans-serif; font-size:20px; font-weight:700; margin-bottom:6px; }
+.modal p { color:var(--muted); font-size:14px; margin-bottom:24px; }
+.modal-field { margin-bottom:16px; }
+.modal-label { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px; }
+.modal-input { width:100%; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:14px; font-family:'DM Sans',sans-serif; outline:none; }
+.modal-input:focus { border-color:rgba(99,102,241,0.4); }
+.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+
+/* ── TOAST ───────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(15,23,42,0.95);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  z-index: 9999;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.success { border-color:rgba(16,185,129,0.3); color:#6ee7b7; }
+.toast.error   { border-color:rgba(244,63,94,0.3);   color:#fda4af; }
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width:600px) {
+  .page { padding:24px 16px 60px; }
+  .dash-header { flex-direction:column; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">PORTFOLIO<span>+</span></div>
+  <div class="nav-right">
+    <button class="btn secondary" onclick="window.location.href='/app'">← Builder</button>
+    <button class="btn glow" onclick="openNewProjectModal()">+ New Portfolio</button>
+    <div class="user-avatar" id="userAvatar" title="Sign out" onclick="logout()"></div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="dash-header">
+    <div class="dash-greeting">
+      <div class="big-avatar" id="bigAvatar">
+        <div class="online-dot"></div>
+      </div>
+      <div class="greeting-text">
+        <h1 id="greetingText">Good morning! 👋</h1>
+        <p id="greetingSubtext">Here's what's happening with your portfolios</p>
+      </div>
+    </div>
+    <div class="dash-actions">
+      <button class="btn secondary" onclick="window.location.href='/app'">Open Builder</button>
+      <button class="btn primary" onclick="openNewProjectModal()">+ New Portfolio</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-icon">◈</div>
+      <div class="stat-value" id="statProjects">—</div>
+      <div class="stat-label">Total Portfolios</div>
+      <div class="stat-change muted" id="statProjectsChange">Loading…</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-icon">◉</div>
+      <div class="stat-value" id="statSections">—</div>
+      <div class="stat-label">Total Sections</div>
+      <div class="stat-change muted">across all portfolios</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-icon">◎</div>
+      <div class="stat-value" id="statPublished">—</div>
+      <div class="stat-label">Published</div>
+      <div class="stat-change muted" id="statDrafts">— drafts</div>
+    </div>
+    <div class="stat-card pink">
+      <div class="stat-icon">◧</div>
+      <div class="stat-value" id="statDays">—</div>
+      <div class="stat-label">Days as Member</div>
+      <div class="stat-change up" id="statJoined">Active</div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section-head">
+    <h2>Your Portfolios</h2>
+    <a onclick="openNewProjectModal()">+ New portfolio</a>
+  </div>
+
+  <div class="projects-grid" id="projectsGrid">
+    <div class="empty-state"><div class="ei">◈</div><p>Loading portfolios…</p></div>
+  </div>
+
+  <!-- TWO COL -->
+  <div class="two-col">
+
+    <!-- PROFILE CARD -->
+    <div class="card">
+      <div class="profile-row">
+        <div class="profile-avatar" id="profileAvatar"></div>
+        <div>
+          <div class="profile-name" id="profileName">—</div>
+          <div class="profile-role">Portfolio Builder Member</div>
+        </div>
+      </div>
+
+      <div class="profile-field">
+        <label>Username</label>
+        <input class="profile-input" id="profileUsername" disabled>
+      </div>
+      <div class="profile-field">
+        <label>Display name</label>
+        <input class="profile-input" id="profileDisplayName" placeholder="Your full name">
+      </div>
+      <div class="profile-field">
+        <label>Email (optional)</label>
+        <input class="profile-input" id="profileEmail" type="email" placeholder="your@email.com">
+      </div>
+      <div class="profile-field">
+        <label>Bio</label>
+        <input class="profile-input" id="profileBio" placeholder="Full-stack developer, designer…">
+      </div>
+      <div class="profile-save-row">
+        <button class="btn primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <!-- ACTIVITY -->
+      <div class="card">
+        <div class="section-head" style="margin-bottom:12px">
+          <h2>Recent Activity</h2>
+        </div>
+        <div class="activity-list" id="activityList">
+          <div class="empty-state" style="padding:20px"><div class="ei">◉</div><p>No activity yet</p></div>
+        </div>
+      </div>
+
+      <!-- TIPS -->
+      <div class="card">
+        <div class="section-head" style="margin-bottom:12px"><h2>Quick Tips</h2></div>
+        <div class="tips-list">
+          <div class="tip" onclick="window.location.href='/app'">
+            <div class="tip-icon">⌘</div>
+            <div class="tip-text"><strong>Keyboard shortcuts</strong>Ctrl+S to save, Ctrl+Z to undo, Delete to remove section</div>
+          </div>
+          <div class="tip" onclick="window.location.href='/app'">
+            <div class="tip-icon">◎</div>
+            <div class="tip-text"><strong>Drag to reorder</strong>Grab the ⠿ handle on any section to drag it up or down</div>
+          </div>
+          <div class="tip" onclick="window.location.href='/app'">
+            <div class="tip-icon">⤓</div>
+            <div class="tip-text"><strong>Export anytime</strong>Click Export to download a complete HTML/CSS portfolio ZIP</div>
+          </div>
+          <div class="tip">
+            <div class="tip-icon">◈</div>
+            <div class="tip-text"><strong>Multiple portfolios</strong>Create different portfolios for different job applications</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- NEW PROJECT MODAL -->
+<div class="modal-overlay" id="newProjectModal" style="display:none" onclick="closeModal(event)">
+  <div class="modal">
+    <h2>New Portfolio</h2>
+    <p>Give your new portfolio a name to get started</p>
+    <div class="modal-field">
+      <label class="modal-label">Portfolio name</label>
+      <input class="modal-input" id="newProjectName" placeholder="e.g. Frontend Developer Portfolio" maxlength="60">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Description (optional)</label>
+      <input class="modal-input" id="newProjectDesc" placeholder="A short description…" maxlength="200">
+    </div>
+    <div class="modal-actions">
+      <button class="btn secondary" onclick="document.getElementById('newProjectModal').style.display='none'">Cancel</button>
+      <button class="btn primary" onclick="createProject()">Create & Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script>
+/* ── AUTH ────────────────────────────────────────── */
+const TOKEN = localStorage.getItem("token");
+const USERNAME = localStorage.getItem("username") || "U";
+if (!TOKEN) window.location.href = "/";
+
+const api = async (method, path, body) => {
+  const res = await fetch(path, {
+    method,
+    headers: { "Content-Type":"application/json", "Authorization":`Bearer ${TOKEN}` },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  return res.json();
+};
+
+/* ── INIT ────────────────────────────────────────── */
+window.addEventListener("DOMContentLoaded", async () => {
+  initDotCanvas();
+  setGreeting();
+  setUserInfo();
+  await loadAll();
+});
+
+function setGreeting() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  document.getElementById("greetingText").textContent = `${greet}, ${USERNAME}! 👋`;
+}
+
+function setUserInfo() {
+  const init = USERNAME[0].toUpperCase();
+  document.getElementById("userAvatar").textContent    = init;
+  document.getElementById("bigAvatar").innerHTML       = `<div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800">${init}</div><div class="online-dot"></div>`;
+  document.getElementById("profileAvatar").textContent = init;
+  document.getElementById("profileName").textContent   = USERNAME;
+  document.getElementById("profileUsername").value     = USERNAME;
+
+  /* load saved profile from localStorage */
+  const saved = JSON.parse(localStorage.getItem("profileData")||"{}");
+  if (saved.displayName) document.getElementById("profileDisplayName").value = saved.displayName;
+  if (saved.email)       document.getElementById("profileEmail").value       = saved.email;
+  if (saved.bio)         document.getElementById("profileBio").value         = saved.bio;
+
+  /* joined date */
+  const joined = localStorage.getItem("joinedDate");
+  if (!joined) localStorage.setItem("joinedDate", new Date().toISOString());
+  const days = Math.floor((Date.now() - new Date(localStorage.getItem("joinedDate"))) / 86400000);
+  document.getElementById("statDays").textContent = Math.max(1, days);
+  document.getElementById("statJoined").textContent = `Since ${new Date(localStorage.getItem("joinedDate")).toLocaleDateString('en',{month:'short',year:'numeric'})}`;
+}
+
+async function loadAll() {
+  const data = await api("GET", "/api/projects");
+  const projects = data.projects || [];
+
+  /* stats */
+  const totalSections = projects.reduce((s,p)=>s+(p.sections?.length||0),0);
+  const published = projects.filter(p=>p.isPublished).length;
+  const drafts = projects.length - published;
+
+  document.getElementById("statProjects").textContent   = projects.length;
+  document.getElementById("statSections").textContent   = totalSections;
+  document.getElementById("statPublished").textContent  = published;
+  document.getElementById("statDrafts").textContent     = `${drafts} draft${drafts!==1?'s':''}`;
+  document.getElementById("statProjectsChange").textContent = projects.length===0 ? "Create your first!" : `${projects.length} portfolio${projects.length!==1?'s':''}`;
+
+  renderProjects(projects);
+  renderActivity(projects);
+}
+
+/* ── RENDER PROJECTS ─────────────────────────────── */
+function renderProjects(projects) {
+  const grid = document.getElementById("projectsGrid");
+
+  const cards = projects.map((p,i) => {
+    const sections = p.sections || [];
+    const colors   = ["#0f172a","#1e293b","#0f1a2e","#131929","#1a1040"];
+    const thumbSections = sections.slice(0,3);
+    const mod = new Date(p.updatedAt||p.lastModified||Date.now());
+    const timeAgo = getTimeAgo(mod);
+
+    const thumbHtml = thumbSections.length > 0
+      ? thumbSections.map(s=>`<div class="thumb-section" style="background:${s.bgColor||colors[0]};color:${s.textColor||'#fff'}">${s.type?.toUpperCase()||'SECTION'}</div>`).join('')
+      : `<div class="thumb-section" style="background:#0f172a;opacity:0.6;justify-content:center">No sections yet</div>`;
+
+    return `
+      <div class="project-card" style="animation-delay:${i*0.07}s">
+        <div class="project-thumb">${thumbHtml}</div>
+        <div class="project-card-body">
+          <div class="project-card-name">
+            ${escHtml(p.name||'Untitled')}
+            <span class="badge ${p.isPublished?'badge-published':'badge-draft'}">${p.isPublished?'Published':'Draft'}</span>
+          </div>
+          <div class="project-card-meta">
+            <span>${sections.length} section${sections.length!==1?'s':''}</span>
+            <span>Edited ${timeAgo}</span>
+          </div>
+          <div class="project-card-actions">
+            <button class="mini-btn accent" onclick="openProject('${p._id}')">✏ Edit</button>
+            <button class="mini-btn" onclick="previewProject('${p._id}')">⬡ Preview</button>
+            <button class="mini-btn danger" onclick="deleteProject('${p._id}','${escHtml(p.name||'Untitled')}')">✕</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  grid.innerHTML = cards + `
+    <div class="new-project-card" onclick="openNewProjectModal()">
+      <div class="plus">+</div>
+      <p>Create new portfolio</p>
+    </div>`;
+}
+
+/* ── RENDER ACTIVITY ─────────────────────────────── */
+function renderActivity(projects) {
+  const list = document.getElementById("activityList");
+
+  if (!projects.length) {
+    list.innerHTML = '<div class="empty-state" style="padding:20px"><div class="ei">◉</div><p>No activity yet</p></div>';
+    return;
+  }
+
+  /* fabricate activity from project data */
+  const acts = [];
+  projects.slice(0,5).forEach(p => {
+    acts.push({
+      icon:"◈", cls:"act-blue",
+      text:`<strong>${escHtml(p.name||'Untitled')}</strong> was ${p.isPublished?'published':'last edited'}`,
+      time: getTimeAgo(new Date(p.updatedAt||p.lastModified||Date.now()))
+    });
+  });
+
+  /* login activity */
+  acts.push({ icon:"◉", cls:"act-green", text:"<strong>You signed in</strong> successfully", time:"just now" });
+
+  list.innerHTML = acts.slice(0,6).map(a=>`
+    <div class="activity-item">
+      <div class="act-icon ${a.cls}">${a.icon}</div>
+      <div class="act-body">
+        <div class="act-text">${a.text}</div>
+        <div class="act-time">${a.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── PROJECT ACTIONS ─────────────────────────────── */
+function openProject(id) {
+  localStorage.setItem("openProjectId", id);
+  window.location.href = "/app";
+}
+
+async function previewProject(id) {
+  const data = await api("GET", `/api/projects/${id}`);
+  if (!data.project) return toast("Failed to load","error");
+  const p = data.project;
+  const sections = p.sections || [];
+  const html = sections.map(s=>`<section style="background:${s.bgColor};color:${s.textColor};padding:${s.padding||40}px 60px"><h2 style="font-size:2em;margin-bottom:14px;font-family:sans-serif">${escHtml(s.title||'')}</h2><p style="line-height:1.8;opacity:0.85">${escHtml(s.content||'').replace(/\n/g,'<br>')}</p></section>`).join('');
+  const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escHtml(p.name)}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#020617;font-family:sans-serif;color:white}section{max-width:900px;margin:0 auto}</style></head><body>${html}</body></html>`],{type:"text/html"});
+  window.open(URL.createObjectURL(blob),"_blank");
+}
+
+async function deleteProject(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const res = await api("DELETE", `/api/projects/${id}`);
+  if (res.message) { toast("Portfolio deleted","success"); await loadAll(); }
+  else toast("Delete failed","error");
+}
+
+/* ── NEW PROJECT ─────────────────────────────────── */
+function openNewProjectModal() {
+  document.getElementById("newProjectName").value = "";
+  document.getElementById("newProjectDesc").value = "";
+  document.getElementById("newProjectModal").style.display = "flex";
+  setTimeout(()=>document.getElementById("newProjectName").focus(), 100);
+}
+
+function closeModal(e) {
+  if (e.target.classList.contains("modal-overlay")) document.getElementById("newProjectModal").style.display="none";
+}
+
+async function createProject() {
+  const name = document.getElementById("newProjectName").value.trim();
+  const description = document.getElementById("newProjectDesc").value.trim();
+  if (!name) return toast("Please enter a name","error");
+
+  const res = await api("POST","/api/projects",{name,description,sections:[]});
+  if (res.project) {
+    document.getElementById("newProjectModal").style.display="none";
+    localStorage.setItem("openProjectId",res.project._id);
+    toast("Created! Opening builder…","success");
+    setTimeout(()=>{ window.location.href="/app"; }, 700);
+  } else {
+    toast("Failed to create","error");
+  }
+}
+
+/* ── SAVE PROFILE ────────────────────────────────── */
+function saveProfile() {
+  const data = {
+    displayName: document.getElementById("profileDisplayName").value,
+    email:       document.getElementById("profileEmail").value,
+    bio:         document.getElementById("profileBio").value
+  };
+  localStorage.setItem("profileData", JSON.stringify(data));
+  if (data.displayName) {
+    document.getElementById("profileName").textContent = data.displayName;
+  }
+  toast("Profile saved!","success");
+}
+
+/* ── UTILS ───────────────────────────────────────── */
+function getTimeAgo(date) {
+  const diff = Date.now() - date.getTime();
+  const m = Math.floor(diff/60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h/24);
+  if (d < 30) return `${d}d ago`;
+  return date.toLocaleDateString('en',{month:'short',day:'numeric'});
+}
+
+function escHtml(str) { return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function logout() {
+  if (!confirm("Sign out?")) return;
+  localStorage.clear();
+  window.location.href = "/";
+}
+
+let toastTimer;
+function toast(msg, type="") {
+  const el = document.getElementById("toast");
+  el.textContent=msg; el.className=`toast show ${type}`;
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>{ el.className="toast"; },2500);
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key==="Enter" && document.getElementById("newProjectModal").style.display!=="none") createProject();
+  if (e.key==="Escape") document.getElementById("newProjectModal").style.display="none";
+});
+
+/* ══ ANIMATED DOT CANVAS ══════════════════════════ */
+function initDotCanvas() {
+  const bg = document.getElementById("bgCanvas");
+  const ctx = bg.getContext("2d");
+  let W, H, dots = [], ripples = [];
+  let mouse = { x:-999, y:-999 };
+  let tick = 0;
+
+  const resize = () => { W=bg.width=innerWidth; H=bg.height=innerHeight; makeDots(); };
+
+  function makeDots() {
+    dots = [];
+    const sp = 44;
+    for (let r=0; r*sp<=H+sp; r++) {
+      for (let c=0; c*sp<=W+sp; c++) {
+        dots.push({ kind:"grid", x:c*sp, y:r*sp, phase:Math.random()*Math.PI*2,
+          speed:0.012+Math.random()*0.008, baseAlpha:0.13+Math.random()*0.08 });
+      }
+    }
+    const cols=[[99,102,241],[59,130,246],[6,182,212],[139,92,246],[236,72,153]];
+    for (let i=0;i<25;i++) {
+      const col=cols[i%cols.length];
+      dots.push({ kind:"orb", x:Math.random()*W, y:Math.random()*H,
+        vx:(Math.random()-0.5)*0.45, vy:(Math.random()-0.5)*0.45,
+        r:2+Math.random()*2.5, phase:Math.random()*Math.PI*2,
+        speed:0.008+Math.random()*0.012, col,
+        baseAlpha:0.3+Math.random()*0.35, connectRadius:110+Math.random()*70 });
+    }
+  }
+
+  function line(ax,ay,bx,by,alpha,col) {
+    const g=ctx.createLinearGradient(ax,ay,bx,by);
+    g.addColorStop(0,`rgba(${col},${alpha})`); g.addColorStop(1,`rgba(${col},0)`);
+    ctx.strokeStyle=g; ctx.lineWidth=0.6;
+    ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+  }
+
+  function draw() {
+    tick++;
+    ctx.clearRect(0,0,W,H);
+    const orbs=dots.filter(d=>d.kind==="orb");
+    const grid=dots.filter(d=>d.kind==="grid");
+
+    grid.forEach(d=>{
+      const pulse=Math.sin(tick*d.speed+d.phase);
+      const dist=Math.hypot(d.x-mouse.x,d.y-mouse.y);
+      const boost=dist<90?(1-dist/90)*0.55:0;
+      ctx.beginPath(); ctx.arc(d.x,d.y,1.2+pulse*0.5+boost,0,Math.PI*2);
+      ctx.fillStyle=`rgba(148,163,184,${d.baseAlpha+pulse*0.05+boost*0.4})`; ctx.fill();
+    });
+
+    orbs.forEach(d=>{
+      d.x+=d.vx; d.y+=d.vy;
+      if (d.x<-20) d.x=W+20; if (d.x>W+20) d.x=-20;
+      if (d.y<-20) d.y=H+20; if (d.y>H+20) d.y=-20;
+      const mdx=d.x-mouse.x, mdy=d.y-mouse.y, md=Math.hypot(mdx,mdy);
+      if (md<80&&md>0) { d.x+=(mdx/md)*1.4; d.y+=(mdy/md)*1.4; }
+      const pulse=Math.sin(tick*d.speed+d.phase);
+      const r=d.r+pulse*1.2; const alpha=d.baseAlpha+pulse*0.15;
+      const cs=d.col.join(",");
+      const grd=ctx.createRadialGradient(d.x,d.y,0,d.x,d.y,r*4);
+      grd.addColorStop(0,`rgba(${cs},${alpha*0.55})`); grd.addColorStop(1,`rgba(${cs},0)`);
+      ctx.beginPath(); ctx.arc(d.x,d.y,r*4,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+      ctx.beginPath(); ctx.arc(d.x,d.y,r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${cs},${Math.min(1,alpha*1.8)})`; ctx.fill();
+    });
+
+    for (let i=0;i<orbs.length;i++) for (let j=i+1;j<orbs.length;j++) {
+      const a=orbs[i],b=orbs[j]; const d=Math.hypot(a.x-b.x,a.y-b.y);
+      const mx=Math.min(a.connectRadius,b.connectRadius);
+      if (d<mx) line(a.x,a.y,b.x,b.y,(1-d/mx)*0.25,a.col.join(","));
+    }
+
+    if (mouse.x>0) orbs.forEach(d=>{
+      const dist=Math.hypot(d.x-mouse.x,d.y-mouse.y);
+      if (dist<170) line(d.x,d.y,mouse.x,mouse.y,(1-dist/170)*0.4,d.col.join(","));
+    });
+
+    if (tick%220===0) ripples.push({x:Math.random()*W,y:Math.random()*H,r:0,alpha:0.35});
+    ripples=ripples.filter(r=>r.alpha>0.01);
+    ripples.forEach(rp=>{
+      rp.r+=1.8; rp.alpha*=0.962;
+      ctx.beginPath(); ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(99,102,241,${rp.alpha})`; ctx.lineWidth=0.8; ctx.stroke();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("mousemove",e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener("mouseleave",()=>{mouse.x=-999;mouse.y=-999;});
+  window.addEventListener("click",e=>ripples.push({x:e.clientX,y:e.clientY,r:0,alpha:0.55}));
+
+  resize(); draw();
+  window.addEventListener("resize",resize);
+}
+</script>
+</body>
+</html>

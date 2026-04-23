@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio+ · Build Portfolios That Get You Hired</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ── HERO ──────────────────────────────────── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: calc(var(--nav-h) + 60px) 24px 80px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 18px 6px 10px;
+  background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.28);
+  border-radius: 40px; font-size: 13px; color: #a5b4fc; margin-bottom: 32px;
+  animation: fadeUp 0.7s var(--ease) both;
+}
+.badge-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 800; line-height: 1.03;
+  letter-spacing: -2.5px;
+  margin-bottom: 26px;
+  animation: fadeUp 0.7s var(--ease) 0.1s both;
+}
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--text2); line-height: 1.75;
+  max-width: 600px; margin-bottom: 44px;
+  animation: fadeUp 0.7s var(--ease) 0.2s both;
+}
+.hero-cta {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  animation: fadeUp 0.7s var(--ease) 0.3s both;
+}
+
+.hero-metrics {
+  display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
+  margin-top: 72px;
+  animation: fadeUp 0.7s var(--ease) 0.5s both;
+}
+.metric { text-align: center; }
+.metric-num {
+  font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  line-height: 1;
+}
+.metric-label { font-size: 13px; color: var(--muted); margin-top: 5px; }
+
+/* ── MOCKUP ─────────────────────────────────── */
+.mockup-container {
+  position: relative; z-index: 1;
+  max-width: 1000px; margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.mockup-glow {
+  position: absolute; inset: -60px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.12), transparent 70%);
+  pointer-events: none;
+}
+.mockup {
+  border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  background: var(--bg2);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+}
+.mockup-bar {
+  height: 42px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px; padding: 0 16px;
+}
+.dot-r { width: 11px; height: 11px; border-radius: 50%; background: #f43f5e; }
+.dot-y { width: 11px; height: 11px; border-radius: 50%; background: #f59e0b; }
+.dot-g { width: 11px; height: 11px; border-radius: 50%; background: #10b981; }
+.mockup-url {
+  flex: 1; margin: 0 16px; height: 24px;
+  background: rgba(255,255,255,0.05); border-radius: 6px;
+  display: flex; align-items: center; padding: 0 10px;
+  font-size: 12px; color: var(--muted);
+}
+.mockup-body { display: grid; grid-template-columns: 200px 1fr 190px; height: 360px; }
+.mockup-side { background: rgba(255,255,255,0.02); border-right: 1px solid var(--border); padding: 14px 12px; }
+.mockup-side-r { background: rgba(255,255,255,0.02); border-left: 1px solid var(--border); padding: 14px 12px; }
+.ms-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 10px; }
+.ms-item {
+  height: 32px; border-radius: 8px; margin-bottom: 7px;
+  display: flex; align-items: center; padding: 0 10px; gap: 7px;
+  font-size: 12px; color: var(--text2); transition: 0.2s;
+}
+.ms-item.on { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.22); color: #a5b4fc; }
+.ms-item:not(.on):hover { background: var(--surface); }
+.mockup-canvas { padding: 18px; overflow: hidden; }
+.ms-section { border-radius: 10px; margin-bottom: 11px; padding: 14px 18px; border: 2px solid transparent; }
+.ms-section.sel { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+.ms-section h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.ms-section p  { font-size: 11px; opacity: 0.55; }
+.ms-field { margin-bottom: 10px; }
+.ms-flabel { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+.ms-finput { height: 26px; background: var(--surface); border-radius: 6px; border: 1px solid var(--border); }
+
+/* ── STEPS ──────────────────────────────────── */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; border-radius: 22px; overflow: hidden; background: var(--border); }
+.step-card { background: var(--bg2); padding: 40px 32px; position: relative; overflow: hidden; transition: background 0.2s; }
+.step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--indigo), var(--cyan)); opacity: 0; transition: opacity 0.3s; }
+.step-card:hover { background: rgba(15,23,42,0.95); }
+.step-card:hover::before { opacity: 1; }
+.step-num { font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; color: rgba(99,102,241,0.15); line-height: 1; margin-bottom: 20px; }
+.step-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+.step-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+.step-desc { font-size: 14px; color: var(--text2); line-height: 1.65; }
+
+/* ── FEATURES ───────────────────────────────── */
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; margin-top: 56px; }
+.feat-card {
+  background: rgba(15,23,42,0.7); backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: 20px; padding: 28px 26px;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.feat-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 0% 0%, rgba(99,102,241,0.07), transparent 60%); opacity: 0; transition: opacity 0.3s; }
+.feat-card:hover { transform: translateY(-4px); border-color: rgba(99,102,241,0.3); box-shadow: 0 20px 48px rgba(0,0,0,0.4); }
+.feat-card:hover::after { opacity: 1; }
+.feat-icon { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; }
+.fi-a { background: rgba(99,102,241,0.14); }
+.fi-b { background: rgba(6,182,212,0.14); }
+.fi-c { background: rgba(16,185,129,0.14); }
+.fi-d { background: rgba(236,72,153,0.14); }
+.fi-e { background: rgba(139,92,246,0.14); }
+.fi-f { background: rgba(245,158,11,0.14); }
+.feat-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 9px; }
+.feat-desc { font-size: 13.5px; color: var(--text2); line-height: 1.65; }
+
+/* ── PAGES SHOWCASE ─────────────────────────── */
+.pages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 52px; }
+.page-card {
+  border-radius: 20px; overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(15,23,42,0.7);
+  transition: all 0.28s var(--ease);
+  cursor: pointer; text-decoration: none; display: block;
+}
+.page-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 24px 56px rgba(0,0,0,0.5); }
+.page-thumb {
+  height: 150px; position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 16px; overflow: hidden;
+}
+.page-thumb-bg { position: absolute; inset: 0; transition: transform 0.4s var(--ease); }
+.page-card:hover .page-thumb-bg { transform: scale(1.05); }
+.page-thumb-content { position: relative; z-index: 1; }
+.page-thumb-label { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: white; }
+.page-thumb-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.page-card-body { padding: 16px 18px; }
+.page-card-title { font-weight: 600; font-size: 14px; margin-bottom: 5px; }
+.page-card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.page-arrow { float: right; font-size: 16px; color: var(--indigo); }
+
+/* ── TESTIMONIALS ───────────────────────────── */
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 52px; }
+.testi-card { background: rgba(15,23,42,0.7); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: all 0.2s; }
+.testi-card:hover { transform: translateY(-3px); border-color: rgba(99,102,241,0.25); }
+.testi-stars { color: #f59e0b; font-size: 13px; margin-bottom: 14px; }
+.testi-quote { font-size: 14px; color: var(--text2); line-height: 1.75; margin-bottom: 20px; font-style: italic; position: relative; padding-left: 18px; }
+.testi-quote::before { content: '"'; position: absolute; left: 0; top: -4px; font-family: 'Syne', sans-serif; font-size: 28px; color: var(--indigo); line-height: 1; }
+.testi-author { display: flex; align-items: center; gap: 11px; }
+.testi-ava { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: white; flex-shrink: 0; }
+.testi-name { font-weight: 600; font-size: 14px; }
+.testi-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── PRICING ────────────────────────────────── */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 52px; }
+.price-card { background: rgba(15,23,42,0.7); border: 1px solid var(--border); border-radius: 22px; padding: 32px 26px; transition: all 0.25s; position: relative; }
+.price-card:hover { transform: translateY(-4px); }
+.price-card.featured { border-color: rgba(99,102,241,0.4); background: rgba(99,102,241,0.06); }
+.price-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--indigo), var(--blue)); color: white; font-size: 11px; font-weight: 700; padding: 4px 16px; border-radius: 20px; white-space: nowrap; }
+.price-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.price-amount { font-family: 'Syne', sans-serif; font-size: 50px; font-weight: 800; line-height: 1; margin-bottom: 4px; background: linear-gradient(135deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.price-period { font-size: 13px; color: var(--muted); margin-bottom: 26px; }
+.price-list { list-style: none; margin-bottom: 28px; }
+.price-list li { font-size: 13.5px; color: var(--text2); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; gap: 9px; align-items: center; }
+.price-list li:last-child { border-bottom: none; }
+.pi-check { color: var(--green); } .pi-x { color: var(--muted); }
+
+/* ── CTA ────────────────────────────────────── */
+.cta-wrap { position: relative; z-index: 1; padding: 80px 24px 120px; }
+.cta-box {
+  max-width: 720px; margin: 0 auto; text-align: center;
+  background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.22);
+  border-radius: 30px; padding: 72px 48px;
+  position: relative; overflow: hidden;
+}
+.cta-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% -10%, rgba(99,102,241,0.15), transparent 65%); }
+.cta-title { font-family: 'Syne', sans-serif; font-size: clamp(28px,4vw,50px); font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; position: relative; }
+.cta-sub { color: var(--text2); font-size: 16px; margin-bottom: 38px; line-height: 1.7; position: relative; }
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+/* ── FOOTER ─────────────────────────────────── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 48px;
+}
+.footer-top { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 40px; margin-bottom: 40px; }
+.footer-brand p { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin-top: 12px; max-width: 240px; }
+.footer-col h4 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 14px; color: var(--text2); }
+.footer-col a { display: block; font-size: 13.5px; color: var(--muted); text-decoration: none; margin-bottom: 9px; transition: color 0.2s; cursor: pointer; }
+.footer-col a:hover { color: var(--text2); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--border); padding-top: 24px; }
+.footer-copy { font-size: 12px; color: var(--muted); }
+
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr; } .pricing-grid { grid-template-columns: 1fr; } .footer-top { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .mockup-body { grid-template-columns: 1fr; height: auto; } .mockup-side, .mockup-side-r { display: none; } .hero-metrics { gap: 28px; } .cta-box { padding: 48px 24px; } footer { padding: 32px 20px; } .footer-top { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <a class="topbar-logo" href="/">PORTFOLIO<em>+</em></a>
+
+  <nav class="topbar-nav">
+    <a class="nav-pill active" href="/"><span class="nav-icon">⌂</span> Home</a>
+    <a class="nav-pill" href="/app"><span class="nav-icon">◈</span> Builder</a>
+    <a class="nav-pill" href="/dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+    <a class="nav-pill" href="/feedback.html"><span class="nav-icon">◎</span> Feedback</a>
+  </nav>
+
+  <div class="topbar-actions">
+    <a class="btn btn-ghost" href="/login.html">Sign in</a>
+    <a class="btn btn-primary" href="/login.html">Get started free →</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="badge-dot">✦</div>
+    AI-powered · Drag & drop · Export ready
+  </div>
+  <h1 class="hero-title">
+    <span class="white-text">Build portfolios</span><br>
+    <span class="gradient-text">that get you hired.</span>
+  </h1>
+  <p class="hero-sub">
+    Create a stunning, professional portfolio in minutes — no code, no design skills. Just drag, drop, customize, and export.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-glow btn-lg" href="/login.html">Start building for free →</a>
+    <a class="btn btn-outline btn-lg" href="#how">See how it works</a>
+  </div>
+  <div class="hero-metrics">
+    <div class="metric"><div class="metric-num">12k+</div><div class="metric-label">Portfolios created</div></div>
+    <div class="metric"><div class="metric-num">98%</div><div class="metric-label">Satisfaction rate</div></div>
+    <div class="metric"><div class="metric-num">&lt;3 min</div><div class="metric-label">Average build time</div></div>
+    <div class="metric"><div class="metric-num">Free</div><div class="metric-label">To get started</div></div>
+  </div>
+</section>
+
+<!-- MOCKUP -->
+<div class="mockup-container reveal">
+  <div class="mockup-glow"></div>
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+      <div class="mockup-url">portfolio-plus.app/builder</div>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-side">
+        <div class="ms-label">Sections</div>
+        <div class="ms-item on">◈ Hero</div>
+        <div class="ms-item">◉ About</div>
+        <div class="ms-item">◧ Projects</div>
+        <div class="ms-item">◈ Skills</div>
+        <div class="ms-item">◎ Contact</div>
+      </div>
+      <div class="mockup-canvas">
+        <div class="ms-section sel" style="background:#0f172a;color:#fff">
+          <h4>Hi, I'm Your Name</h4>
+          <p>A passionate developer creating amazing digital experiences.</p>
+        </div>
+        <div class="ms-section" style="background:#1e293b;color:#f1f5f9">
+          <h4>About Me</h4>
+          <p>I build things for the web with passion and precision.</p>
+        </div>
+        <div class="ms-section" style="background:#0f1a2e;color:#e2e8f0">
+          <h4>Projects</h4>
+          <p>Featured work and case studies.</p>
+        </div>
+      </div>
+      <div class="mockup-side-r">
+        <div class="ms-label">Edit Section</div>
+        <div class="ms-field"><div class="ms-flabel">Title</div><div class="ms-finput"></div></div>
+        <div class="ms-field"><div class="ms-flabel">Content</div><div class="ms-finput" style="height:50px"></div></div>
+        <div class="ms-field"><div class="ms-flabel">Color</div><div class="ms-finput" style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--blue))"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="section-center reveal">
+      <div class="eyebrow">How it works</div>
+      <h2 class="display-title"><span class="white-text">From zero to portfolio</span><br><span class="gradient-text">in three steps.</span></h2>
+      <p class="lead" style="margin:0 auto">No design skills. No coding. Just your story, beautifully told.</p>
+    </div>
+    <div class="steps reveal" style="margin-top:52px">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">◉</div>
+        <div class="step-title">Create your account</div>
+        <div class="step-desc">Sign up in seconds — no credit card needed. Your work is securely saved to the cloud, always.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">◈</div>
+        <div class="step-title">Build your sections</div>
+        <div class="step-desc">Add Hero, About, Projects, Skills, and Contact sections. Drag to reorder, click to edit colors and text live.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">⤓</div>
+        <div class="step-title">Export & go live</div>
+        <div class="step-desc">Export a clean HTML/CSS ZIP and deploy to GitHub Pages, Netlify, or Vercel in literally two minutes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGES SHOWCASE -->
+<section class="section" style="padding-top:0">
+  <div class="section-inner">
+    <div class="section-center reveal">
+      <div class="eyebrow">Explore the app</div>
+      <h2 class="display-title"><span class="white-text">Every page,</span> <span class="gradient-text">crafted.</span></h2>
+      <p class="lead" style="margin:0 auto">A complete product — builder, dashboard, feedback. All beautifully designed.</p>
+    </div>
+    <div class="pages-grid reveal">
+      <a class="page-card" href="/app">
+        <div class="page-thumb">
+          <div class="page-thumb-bg" style="background:linear-gradient(135deg,#1e1b4b 0%,#0f172a 100%)">
+            <div style="position:absolute;inset:0;display:grid;grid-template-columns:60px 1fr 55px;opacity:0.6">
+              <div style="border-right:1px solid rgba(255,255,255,0.08);padding:10px 8px">
+                <div style="height:18px;background:rgba(99,102,241,0.4);border-radius:4px;margin-bottom:5px"></div>
+                <div style="height:14px;background:rgba(255,255,255,0.1);border-radius:4px;margin-bottom:4px"></div>
+                <div style="height:14px;background:rgba(255,255,255,0.1);border-radius:4px;margin-bottom:4px"></div>
+                <div style="height:14px;background:rgba(255,255,255,0.1);border-radius:4px"></div>
+              </div>
+              <div style="padding:10px">
+                <div style="height:40px;background:rgba(99,102,241,0.25);border-radius:6px;margin-bottom:6px;border:1px solid rgba(99,102,241,0.5)"></div>
+                <div style="height:30px;background:rgba(255,255,255,0.06);border-radius:6px;margin-bottom:6px"></div>
+                <div style="height:30px;background:rgba(255,255,255,0.04);border-radius:6px"></div>
+              </div>
+              <div style="border-left:1px solid rgba(255,255,255,0.08);padding:10px 8px">
+                <div style="height:14px;background:rgba(255,255,255,0.1);border-radius:4px;margin-bottom:5px"></div>
+                <div style="height:14px;background:rgba(255,255,255,0.1);border-radius:4px;margin-bottom:5px"></div>
+                <div style="height:22px;background:rgba(99,102,241,0.25);border-radius:4px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="page-thumb-content">
+            <div class="page-thumb-label">Portfolio Builder</div>
+            <div class="page-thumb-sub">Drag · Drop · Edit · Export</div>
+          </div>
+        </div>
+        <div class="page-card-body">
+          <div class="page-card-title">Builder <span class="page-arrow">→</span></div>
+          <div class="page-card-desc">The full drag-and-drop editor. Add sections, customize colors, undo/redo, and export.</div>
+        </div>
+      </a>
+
+      <a class="page-card" href="/dashboard.html">
+        <div class="page-thumb">
+          <div class="page-thumb-bg" style="background:linear-gradient(135deg,#0f2e1a 0%,#042f2e 100%)">
+            <div style="position:absolute;inset:0;padding:12px;opacity:0.7">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px">
+                <div style="height:28px;background:rgba(16,185,129,0.3);border-radius:6px;border-top:2px solid #10b981"></div>
+                <div style="height:28px;background:rgba(6,182,212,0.25);border-radius:6px;border-top:2px solid #06b6d4"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px">
+                <div style="height:28px;background:rgba(245,158,11,0.25);border-radius:6px;border-top:2px solid #f59e0b"></div>
+                <div style="height:28px;background:rgba(99,102,241,0.25);border-radius:6px;border-top:2px solid #6366f1"></div>
+              </div>
+              <div style="height:38px;background:rgba(255,255,255,0.05);border-radius:6px;margin-bottom:5px"></div>
+              <div style="height:24px;background:rgba(255,255,255,0.04);border-radius:6px"></div>
+            </div>
+          </div>
+          <div class="page-thumb-content">
+            <div class="page-thumb-label">Dashboard</div>
+            <div class="page-thumb-sub">Stats · Projects · Profile</div>
+          </div>
+        </div>
+        <div class="page-card-body">
+          <div class="page-card-title">Dashboard <span class="page-arrow">→</span></div>
+          <div class="page-card-desc">See all your portfolios, stats, edit your profile, and track recent activity.</div>
+        </div>
+      </a>
+
+      <a class="page-card" href="/feedback.html">
+        <div class="page-thumb">
+          <div class="page-thumb-bg" style="background:linear-gradient(135deg,#2d1b4e 0%,#1a0533 100%)">
+            <div style="position:absolute;inset:0;padding:14px;opacity:0.7">
+              <div style="display:flex;gap:5px;margin-bottom:10px">
+                <div style="font-size:20px">★</div><div style="font-size:20px">★</div><div style="font-size:20px">★</div><div style="font-size:20px;opacity:0.3">★</div><div style="font-size:20px;opacity:0.3">★</div>
+              </div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                <div style="height:20px;width:60px;background:rgba(139,92,246,0.35);border-radius:20px;border:1px solid rgba(139,92,246,0.4)"></div>
+                <div style="height:20px;width:48px;background:rgba(99,102,241,0.25);border-radius:20px"></div>
+                <div style="height:20px;width:52px;background:rgba(99,102,241,0.25);border-radius:20px"></div>
+              </div>
+              <div style="height:40px;background:rgba(255,255,255,0.05);border-radius:8px;margin-top:8px"></div>
+            </div>
+          </div>
+          <div class="page-thumb-content">
+            <div class="page-thumb-label">Feedback</div>
+            <div class="page-thumb-sub">Ratings · Votes · Reviews</div>
+          </div>
+        </div>
+        <div class="page-card-body">
+          <div class="page-card-title">Feedback <span class="page-arrow">→</span></div>
+          <div class="page-card-desc">Rate the app, vote on features, and help shape what we build next.</div>
+        </div>
+      </a>
+
+      <a class="page-card" href="/login.html">
+        <div class="page-thumb">
+          <div class="page-thumb-bg" style="background:linear-gradient(135deg,#1e293b 0%,#020617 100%)">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.7">
+              <div style="width:110px;background:rgba(15,23,42,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px">
+                <div style="height:10px;background:rgba(99,102,241,0.5);border-radius:3px;margin-bottom:8px"></div>
+                <div style="height:22px;background:rgba(255,255,255,0.06);border-radius:6px;margin-bottom:5px"></div>
+                <div style="height:22px;background:rgba(255,255,255,0.06);border-radius:6px;margin-bottom:8px"></div>
+                <div style="height:22px;background:linear-gradient(135deg,rgba(99,102,241,0.8),rgba(59,130,246,0.8));border-radius:6px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="page-thumb-content">
+            <div class="page-thumb-label">Sign In</div>
+            <div class="page-thumb-sub">Login · Register</div>
+          </div>
+        </div>
+        <div class="page-card-body">
+          <div class="page-card-title">Login / Register <span class="page-arrow">→</span></div>
+          <div class="page-card-desc">Secure authentication with JWT. Create an account or sign back in.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features" style="padding-top:20px">
+  <div class="section-inner">
+    <div class="section-center reveal">
+      <div class="eyebrow">Features</div>
+      <h2 class="display-title"><span class="white-text">Everything you need,</span><br><span class="gradient-text">nothing you don't.</span></h2>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat-card"><div class="feat-icon fi-a">◈</div><div class="feat-title">Visual drag-and-drop</div><div class="feat-desc">Rearrange sections by dragging. See every change instantly in real time.</div></div>
+      <div class="feat-card"><div class="feat-icon fi-b">↩</div><div class="feat-title">50-step undo history</div><div class="feat-desc">Made a mistake? Ctrl+Z to go back. Full undo/redo stack with keyboard shortcuts.</div></div>
+      <div class="feat-card"><div class="feat-icon fi-c">⤓</div><div class="feat-title">One-click ZIP export</div><div class="feat-desc">Download a complete HTML/CSS portfolio ready to deploy anywhere — instantly.</div></div>
+      <div class="feat-card"><div class="feat-icon fi-d">◧</div><div class="feat-title">Multiple portfolios</div><div class="feat-desc">Create different versions for different roles. Frontend, backend, design — all separate.</div></div>
+      <div class="feat-card"><div class="feat-icon fi-e">🎨</div><div class="feat-title">Full theming control</div><div class="feat-desc">Custom accent colors, background colors, font families per section. Complete creative control.</div></div>
+      <div class="feat-card"><div class="feat-icon fi-f">💾</div><div class="feat-title">Auto-save to cloud</div><div class="feat-desc">Never lose your work. Saves automatically 3 seconds after every change you make.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="padding-top:20px">
+  <div class="section-inner">
+    <div class="section-center reveal">
+      <div class="eyebrow">Testimonials</div>
+      <h2 class="display-title"><span class="white-text">Loved by</span> <span class="gradient-text">real people.</span></h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Built my entire portfolio in under 10 minutes. Got 3 interview calls that same week. The export is clean, the design is stunning.</p>
+        <div class="testi-author">
+          <div class="testi-ava" style="background:linear-gradient(135deg,#6366f1,#3b82f6)">AK</div>
+          <div><div class="testi-name">Arjun Kumar</div><div class="testi-role">Frontend Dev, Bangalore</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">I exported the ZIP and deployed to GitHub Pages in 2 minutes. The code it generates is actually clean and professional. Incredible.</p>
+        <div class="testi-author">
+          <div class="testi-ava" style="background:linear-gradient(135deg,#10b981,#06b6d4)">PS</div>
+          <div><div class="testi-name">Priya Sharma</div><div class="testi-role">Full-stack Engineer, Mumbai</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">As a designer I was skeptical. But Portfolio+ gives full control over every color and font. The result looks genuinely hand-crafted.</p>
+        <div class="testi-author">
+          <div class="testi-ava" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">RS</div>
+          <div><div class="testi-name">Rohit Singh</div><div class="testi-role">UI/UX Designer, Delhi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-top:20px">
+  <div class="section-inner">
+    <div class="section-center reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2 class="display-title"><span class="white-text">Simple,</span> <span class="gradient-text">honest pricing.</span></h2>
+      <p class="lead" style="margin:0 auto">Start free forever. Upgrade only when you need more.</p>
+    </div>
+    <div class="pricing-grid reveal">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">₹0</div>
+        <div class="price-period">forever, no card needed</div>
+        <ul class="price-list">
+          <li><span class="pi-check">✓</span>2 portfolios</li>
+          <li><span class="pi-check">✓</span>All section types</li>
+          <li><span class="pi-check">✓</span>ZIP export</li>
+          <li><span class="pi-check">✓</span>Auto-save</li>
+          <li><span class="pi-x">—</span>Custom domain</li>
+          <li><span class="pi-x">—</span>Analytics</li>
+        </ul>
+        <a class="btn btn-outline" style="width:100%;justify-content:center" href="/login.html">Get started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">₹299</div>
+        <div class="price-period">per month · cancel anytime</div>
+        <ul class="price-list">
+          <li><span class="pi-check">✓</span>Unlimited portfolios</li>
+          <li><span class="pi-check">✓</span>All section types</li>
+          <li><span class="pi-check">✓</span>ZIP export</li>
+          <li><span class="pi-check">✓</span>Auto-save</li>
+          <li><span class="pi-check">✓</span>Custom domain</li>
+          <li><span class="pi-check">✓</span>Analytics</li>
+        </ul>
+        <a class="btn btn-primary" style="width:100%;justify-content:center" href="/login.html">Start Pro →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Team</div>
+        <div class="price-amount">₹799</div>
+        <div class="price-period">per month · 5 seats</div>
+        <ul class="price-list">
+          <li><span class="pi-check">✓</span>Everything in Pro</li>
+          <li><span class="pi-check">✓</span>5 team members</li>
+          <li><span class="pi-check">✓</span>Shared templates</li>
+          <li><span class="pi-check">✓</span>Priority support</li>
+          <li><span class="pi-check">✓</span>Custom branding</li>
+          <li><span class="pi-check">✓</span>API access</li>
+        </ul>
+        <a class="btn btn-outline" style="width:100%;justify-content:center" href="/feedback.html">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-box reveal">
+    <h2 class="cta-title"><span class="white-text">Ready to build your</span> <span class="gradient-text">dream portfolio?</span></h2>
+    <p class="cta-sub">Join thousands of developers and designers who've already created stunning portfolios. It's free to start.</p>
+    <div class="cta-btns">
+      <a class="btn btn-glow btn-lg" href="/login.html">Create your portfolio →</a>
+      <a class="btn btn-outline btn-lg" href="/feedback.html">Give us feedback</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="topbar-logo" style="font-size:24px">PORTFOLIO<em>+</em></div>
+      <p>Build stunning portfolios that get you hired. No code, no design skills needed.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="/app">Builder</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <a href="/">Home</a>
+      <a href="/login.html">Sign In</a>
+      <a href="/login.html">Register</a>
+      <a href="/feedback.html">Feedback</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shortcuts</h4>
+      <a>Ctrl+S — Save</a>
+      <a>Ctrl+Z — Undo</a>
+      <a>Ctrl+Y — Redo</a>
+      <a>Ctrl+D — Duplicate</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Portfolio+ · Built with ♥ in India</div>
+    <div class="footer-copy">No ads · No tracking · Your data is yours</div>
+  </div>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script src="shared.js"></script>
+</body>
+</html>

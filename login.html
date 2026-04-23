@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio+ · Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.page-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 32px) 24px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 0;
+  width: 100%;
+  max-width: 900px;
+  background: rgba(15,23,42,0.75);
+  backdrop-filter: blur(28px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.65);
+  animation: scaleIn 0.5s var(--ease) both;
+}
+
+/* ── LEFT PANEL ─────────────────────────────── */
+.split-left {
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.split-left::before {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(99,102,241,0.25), transparent 65%);
+  top: -100px; right: -100px;
+  pointer-events: none;
+}
+.split-left::after {
+  content: '';
+  position: absolute;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(6,182,212,0.15), transparent 65%);
+  bottom: -80px; left: -60px;
+  pointer-events: none;
+}
+
+.split-brand { position: relative; z-index: 1; }
+.split-brand .logo { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 32px; display: block; }
+.split-brand .logo em { font-style: normal; background: linear-gradient(135deg,var(--indigo),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.split-headline { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.5px; }
+.split-sub { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+.feature-pills { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; margin-top: 40px; }
+.feature-pill {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  font-size: 13px; color: rgba(255,255,255,0.7);
+}
+.feature-pill-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(99,102,241,0.25); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+
+/* ── RIGHT PANEL ────────────────────────────── */
+.split-right { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+
+.auth-tabs {
+  display: flex;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 32px;
+}
+.auth-tab {
+  flex: 1; padding: 9px; border: none;
+  background: none; color: var(--muted);
+  border-radius: 9px; cursor: pointer;
+  font-size: 14px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.auth-tab.on { background: rgba(99,102,241,0.18); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+
+.auth-alert {
+  padding: 11px 14px; border-radius: 11px;
+  font-size: 13px; display: none; align-items: center; gap: 8px;
+  margin-bottom: 18px;
+}
+.auth-alert.show { display: flex; }
+.auth-alert.err { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.22); color: #fda4af; }
+.auth-alert.ok  { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22); color: #6ee7b7; }
+
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.field input {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 11px;
+  color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: all 0.2s;
+}
+.field input::placeholder { color: #334155; }
+.field input:focus { border-color: rgba(99,102,241,0.45); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); background: rgba(99,102,241,0.04); }
+
+.pwd-wrap { position: relative; }
+.pwd-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); cursor: pointer; font-size: 15px; padding: 4px; transition: color 0.2s; }
+.pwd-toggle:hover { color: var(--text2); }
+
+.strength-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 7px; overflow: hidden; }
+.strength-fill { height: 100%; border-radius: 2px; transition: all 0.3s; width: 0; }
+
+.submit-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--indigo), var(--blue));
+  border: none; border-radius: 12px;
+  color: white; font-size: 15px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif; cursor: pointer;
+  transition: all 0.25s; position: relative; overflow: hidden;
+  margin-top: 8px;
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(99,102,241,0.4); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.submit-btn .spin { display: none; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+.submit-btn.loading .spin { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.auth-footer { text-align: center; margin-top: 20px; font-size: 12px; color: var(--muted); }
+
+@media (max-width: 768px) {
+  .split { grid-template-columns: 1fr; }
+  .split-left { display: none; }
+  .split-right { padding: 36px 28px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<header class="topbar" id="topbar">
+  <a class="topbar-logo" href="/">PORTFOLIO<em>+</em></a>
+  <nav class="topbar-nav">
+    <a class="nav-pill" href="/"><span class="nav-icon">⌂</span> Home</a>
+    <a class="nav-pill" href="/app"><span class="nav-icon">◈</span> Builder</a>
+    <a class="nav-pill" href="/dashboard.html"><span class="nav-icon">⊞</span> Dashboard</a>
+    <a class="nav-pill" href="/feedback.html"><span class="nav-icon">◎</span> Feedback</a>
+  </nav>
+  <div class="topbar-actions">
+    <a class="btn btn-primary" href="/login.html">Sign in</a>
+  </div>
+</header>
+
+<div class="page-wrap">
+  <div class="split">
+
+    <!-- LEFT -->
+    <div class="split-left">
+      <div class="split-brand">
+        <span class="logo">PORTFOLIO<em>+</em></span>
+        <div class="split-headline">Your portfolio,<br>your story.</div>
+        <div class="split-sub">Join thousands of developers and designers who've built stunning portfolios and landed their dream jobs.</div>
+      </div>
+      <div class="feature-pills">
+        <div class="feature-pill"><div class="feature-pill-icon">◈</div>Drag-and-drop visual builder</div>
+        <div class="feature-pill"><div class="feature-pill-icon">⤓</div>One-click HTML/CSS export</div>
+        <div class="feature-pill"><div class="feature-pill-icon">💾</div>Auto-save to cloud</div>
+        <div class="feature-pill"><div class="feature-pill-icon">↩</div>50-step undo history</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="split-right">
+      <div class="auth-tabs">
+        <button class="auth-tab on" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabReg" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <div class="auth-alert" id="alert"></div>
+
+      <div class="field">
+        <label>Username</label>
+        <input id="username" type="text" placeholder="your_username" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="pwd-wrap">
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+          <button class="pwd-toggle" onclick="togglePwd()">👁</button>
+        </div>
+        <div class="strength-bar" id="sbar" style="display:none"><div class="strength-fill" id="sfill"></div></div>
+      </div>
+
+      <button class="submit-btn" id="actionBtn" onclick="handleAuth()">
+        <span class="spin"></span>
+        <span id="btnLabel">Sign In</span>
+      </button>
+
+      <div class="auth-footer">Portfolio+ © 2026 · Secure · No ads · Your data is yours</div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="shared.js"></script>
+<script>
+let mode = 'login';
+
+function switchTab(t) {
+  mode = t;
+  document.getElementById('tabLogin').classList.toggle('on', t === 'login');
+  document.getElementById('tabReg').classList.toggle('on', t === 'register');
+  document.getElementById('btnLabel').textContent = t === 'login' ? 'Sign In' : 'Create Account';
+  const sbar = document.getElementById('sbar');
+  sbar.style.display = t === 'register' ? 'block' : 'none';
+  hideAlert();
+}
+
+function togglePwd() {
+  const p = document.getElementById('password');
+  p.type = p.type === 'password' ? 'text' : 'password';
+}
+
+document.getElementById('password').addEventListener('input', function() {
+  if (mode !== 'register') return;
+  const v = this.value; let s = 0;
+  if (v.length >= 6) s++; if (v.length >= 10) s++; if (/[A-Z]/.test(v)) s++;
+  if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
+  const cols = ['#f43f5e','#f59e0b','#eab308','#22c55e','#10b981'];
+  const fill = document.getElementById('sfill');
+  fill.style.width = (s / 5 * 100) + '%';
+  fill.style.background = cols[s - 1] || '#334155';
+});
+
+function showAlert(msg, type = 'err') {
+  const el = document.getElementById('alert');
+  el.textContent = (type === 'err' ? '⚠ ' : '✓ ') + msg;
+  el.className = 'auth-alert show ' + type;
+}
+function hideAlert() { document.getElementById('alert').className = 'auth-alert'; }
+
+function setLoading(on) {
+  const btn = document.getElementById('actionBtn');
+  btn.disabled = on; btn.classList.toggle('loading', on);
+}
+
+async function handleAuth() {
+  const name = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  hideAlert();
+  if (!name || !password) return showAlert('Please fill in all fields');
+  if (mode === 'register' && password.length < 6) return showAlert('Password must be at least 6 characters');
+  setLoading(true);
+  try {
+    const res = await fetch(mode === 'login' ? '/auth/login' : '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, password })
+    });
+    const data = await res.json();
+    if (res.ok && data.userId) {
+      localStorage.setItem('userId', data.userId);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.user?.name || name);
+      showAlert(mode === 'login' ? 'Welcome back!' : 'Account created!', 'ok');
+      setTimeout(() => { window.location.href = '/app'; }, 900);
+    } else {
+      showAlert(data.message || 'Something went wrong');
+    }
+  } catch { showAlert('Connection error. Is the server running?'); }
+  finally { setLoading(false); }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+</script>
+</body>
+</html>
